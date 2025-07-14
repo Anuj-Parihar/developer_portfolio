@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 // Helper function to send a message via Telegram
 async function sendTelegramMessage(token, chat_id, message) {
-  const url = `https://api.telegram.org/bot8156342262:AAExqiZGU8O2_2BDYhcpsNGxT3JL5FSrkXI/sendMessage`;
+  const url = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
   try {
     const res = await axios.post(url, {
       text: message,
