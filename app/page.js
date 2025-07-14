@@ -30,25 +30,31 @@ import AboutSection from "./components/homepage/about";
 import ContactSection from "./components/homepage/contact";
 import Education from "./components/homepage/education";
 import Experience from "./components/homepage/experience";
-// import HeroSection from "./components/homepage/hero-section";
-import Projects from "./components/homepage/projects";
 import Skills from "./components/homepage/skills";
+import Projects from "./components/homepage/projects";
 
-// Optionally load components that might use browser APIs dynamically
-const DynamicHeroSection = dynamic(() => import('./components/homepage/hero-section'), {
-  ssr: false,
-});
+// Dynamically import components that use browser APIs
+const HeroSection = dynamic(
+  () => import('./components/homepage/hero-section'),
+  { ssr: false }
+);
+
+const ScrollToTop = dynamic(
+  () => import('./components/helper/scroll-to-top'),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
     <div>
-      <DynamicHeroSection />
+      <HeroSection />
       <AboutSection />
       <Experience />
       <Skills />
       <Projects />
       <Education />
       <ContactSection />
+      <ScrollToTop />
     </div>
   );
 }

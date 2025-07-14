@@ -4,11 +4,13 @@ import { useEffect } from 'react';
 
 const GlowCard = ({ children, identifier }) => {
   useEffect(() => {
-    // Only run in browser environment
-    if (typeof window === "undefined") return;
+    // Skip during SSR
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
     const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
     const CARDS = document.querySelectorAll(`.glow-card-${identifier}`);
+
+    if (!CARDS.length) return;
 
     const CONFIG = {
       proximity: 40,
@@ -33,7 +35,7 @@ const GlowCard = ({ children, identifier }) => {
         ) {
           CARD.style.setProperty('--active', '1');
         } else {
-          CARD.style.setProperty('--active', CONFIG.opacity);
+          CARD.style.setProperty('--active', CONFIG.opacity.toString());
         }
 
         const CARD_CENTER = [
@@ -41,34 +43,30 @@ const GlowCard = ({ children, identifier }) => {
           CARD_BOUNDS.top + CARD_BOUNDS.height * 0.5,
         ];
 
-        let ANGLE =
-          (Math.atan2(event.y - CARD_CENTER[1], event.x - CARD_CENTER[0]) * 180) /
-          Math.PI;
+        let ANGLE = (Math.atan2(
+          event.y - CARD_CENTER[1], 
+          event.x - CARD_CENTER[0]
+        ) * 180) / Math.PI;
 
         ANGLE = ANGLE < 0 ? ANGLE + 360 : ANGLE;
-
-        CARD.style.setProperty('--start', ANGLE + 90);
+        CARD.style.setProperty('--start', (ANGLE + 90).toString());
       }
     };
 
     const RESTYLE = () => {
       if (!CONTAINER) return;
-      CONTAINER.style.setProperty('--gap', CONFIG.gap);
-      CONTAINER.style.setProperty('--blur', CONFIG.blur);
-      CONTAINER.style.setProperty('--spread', CONFIG.spread);
+      CONTAINER.style.setProperty('--gap', `${CONFIG.gap}px`);
+      CONTAINER.style.setProperty('--blur', `${CONFIG.blur}px`);
+      CONTAINER.style.setProperty('--spread', `${CONFIG.spread}px`);
       CONTAINER.style.setProperty(
         '--direction',
         CONFIG.vertical ? 'column' : 'row'
       );
     };
 
-    // Initial styles after mount
     RESTYLE();
-
-    // Add event listener
     document.body.addEventListener('pointermove', UPDATE);
 
-    // Cleanup function
     return () => {
       document.body.removeEventListener('pointermove', UPDATE);
     };
