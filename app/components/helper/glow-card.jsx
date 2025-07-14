@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 const GlowCard = ({ children, identifier }) => {
   useEffect(() => {
-    // Only run if window exists
+    // Only run in browser environment
     if (typeof window === "undefined") return;
 
     const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
@@ -20,16 +20,18 @@ const GlowCard = ({ children, identifier }) => {
     };
 
     const UPDATE = (event) => {
+      if (!event) return;
+
       for (const CARD of CARDS) {
         const CARD_BOUNDS = CARD.getBoundingClientRect();
 
         if (
-          event?.x > CARD_BOUNDS.left - CONFIG.proximity &&
-          event?.x < CARD_BOUNDS.left + CARD_BOUNDS.width + CONFIG.proximity &&
-          event?.y > CARD_BOUNDS.top - CONFIG.proximity &&
-          event?.y < CARD_BOUNDS.top + CARD_BOUNDS.height + CONFIG.proximity
+          event.x > CARD_BOUNDS.left - CONFIG.proximity &&
+          event.x < CARD_BOUNDS.left + CARD_BOUNDS.width + CONFIG.proximity &&
+          event.y > CARD_BOUNDS.top - CONFIG.proximity &&
+          event.y < CARD_BOUNDS.top + CARD_BOUNDS.height + CONFIG.proximity
         ) {
-          CARD.style.setProperty('--active', 1);
+          CARD.style.setProperty('--active', '1');
         } else {
           CARD.style.setProperty('--active', CONFIG.opacity);
         }
@@ -40,8 +42,7 @@ const GlowCard = ({ children, identifier }) => {
         ];
 
         let ANGLE =
-          (Math.atan2(event?.y - CARD_CENTER[1], event?.x - CARD_CENTER[0]) *
-            180) /
+          (Math.atan2(event.y - CARD_CENTER[1], event.x - CARD_CENTER[0]) * 180) /
           Math.PI;
 
         ANGLE = ANGLE < 0 ? ANGLE + 360 : ANGLE;
@@ -67,7 +68,7 @@ const GlowCard = ({ children, identifier }) => {
     // Add event listener
     document.body.addEventListener('pointermove', UPDATE);
 
-    // Cleanup event listener
+    // Cleanup function
     return () => {
       document.body.removeEventListener('pointermove', UPDATE);
     };
@@ -77,6 +78,10 @@ const GlowCard = ({ children, identifier }) => {
     <div className={`glow-container-${identifier} glow-container`}>
       <article
         className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}
+        style={{
+          '--active': '0',
+          '--start': '0',
+        }}
       >
         <div className="glows"></div>
         {children}
@@ -86,6 +91,9 @@ const GlowCard = ({ children, identifier }) => {
 };
 
 export default GlowCard;
+
+
+
 
 // "use client";
 
