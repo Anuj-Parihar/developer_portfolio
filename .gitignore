@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Windows lock files
+Thumbs.db
+.DS_Store
+*.lock
