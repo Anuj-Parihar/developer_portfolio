@@ -181,19 +181,14 @@
 // // };
 
 // // export default GlowCard;
-"use client";
+"use client"
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-const GlowCard = ({ children, identifier }) => {
+const GlowCard = ({ children , identifier}) => {
   useEffect(() => {
-    if (typeof window === "undefined" || typeof document === "undefined")
-      return;
-
     const CONTAINER = document.querySelector(`.glow-container-${identifier}`);
     const CARDS = document.querySelectorAll(`.glow-card-${identifier}`);
-
-    if (!CARDS.length) return;
 
     const CONFIG = {
       proximity: 40,
@@ -205,76 +200,62 @@ const GlowCard = ({ children, identifier }) => {
     };
 
     const UPDATE = (event) => {
-      if (!event) return;
-
       for (const CARD of CARDS) {
-        const BOUNDS = CARD.getBoundingClientRect();
+        const CARD_BOUNDS = CARD.getBoundingClientRect();
 
-        const inProximity =
-          event.x > BOUNDS.left - CONFIG.proximity &&
-          event.x < BOUNDS.right + CONFIG.proximity &&
-          event.y > BOUNDS.top - CONFIG.proximity &&
-          event.y < BOUNDS.bottom + CONFIG.proximity;
+        if (
+          event?.x > CARD_BOUNDS.left - CONFIG.proximity &&
+          event?.x < CARD_BOUNDS.left + CARD_BOUNDS.width + CONFIG.proximity &&
+          event?.y > CARD_BOUNDS.top - CONFIG.proximity &&
+          event?.y < CARD_BOUNDS.top + CARD_BOUNDS.height + CONFIG.proximity
+        ) {
+          CARD.style.setProperty('--active', 1);
+        } else {
+          CARD.style.setProperty('--active', CONFIG.opacity);
+        }
 
-        CARD.style.setProperty("--active", inProximity ? "1" : `${CONFIG.opacity}`);
+        const CARD_CENTER = [
+          CARD_BOUNDS.left + CARD_BOUNDS.width * 0.5,
+          CARD_BOUNDS.top + CARD_BOUNDS.height * 0.5,
+        ];
 
-        const centerX = BOUNDS.left + BOUNDS.width / 2;
-        const centerY = BOUNDS.top + BOUNDS.height / 2;
+        let ANGLE =
+          (Math.atan2(event?.y - CARD_CENTER[1], event?.x - CARD_CENTER[0]) *
+            180) /
+          Math.PI;
 
-        let angle = (Math.atan2(event.y - centerY, event.x - centerX) * 180) / Math.PI;
-        angle = angle < 0 ? angle + 360 : angle;
+        ANGLE = ANGLE < 0 ? ANGLE + 360 : ANGLE;
 
-        CARD.style.setProperty("--start", (angle + 90).toString());
+        CARD.style.setProperty('--start', ANGLE + 90);
       }
     };
 
+    document.body.addEventListener('pointermove', UPDATE);
+
     const RESTYLE = () => {
-      if (!CONTAINER) return;
-      CONTAINER.style.setProperty("--gap", `${CONFIG.gap}px`);
-      CONTAINER.style.setProperty("--blur", `${CONFIG.blur}px`);
-      CONTAINER.style.setProperty("--spread", `${CONFIG.spread}px`);
+      CONTAINER.style.setProperty('--gap', CONFIG.gap);
+      CONTAINER.style.setProperty('--blur', CONFIG.blur);
+      CONTAINER.style.setProperty('--spread', CONFIG.spread);
       CONTAINER.style.setProperty(
-        "--direction",
-        CONFIG.vertical ? "column" : "row"
+        '--direction',
+        CONFIG.vertical ? 'column' : 'row'
       );
     };
 
     RESTYLE();
-    document.body.addEventListener("pointermove", UPDATE);
+    UPDATE();
 
+    // Cleanup event listener
     return () => {
-      document.body.removeEventListener("pointermove", UPDATE);
+      document.body.removeEventListener('pointermove', UPDATE);
     };
   }, [identifier]);
 
   return (
     <div className={`glow-container-${identifier} glow-container`}>
-      <article
-        className={`glow-card glow-card-${identifier} relative overflow-hidden group h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 bg-[#101123] text-gray-200 rounded-xl hover:border-violet-500`}
-        style={{
-          '--active': '0',
-          '--start': '0',
-        }}
-      >
-        {/* Glow background layer */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(
-              circle at var(--start, 0)deg,
-              rgba(118, 56, 255, var(--active)) 0%,
-              rgba(22, 242, 179, 0) 60%
-            )`,
-            filter: "blur(30px)",
-            opacity: "0.6",
-            transition: "opacity 0.3s ease",
-          }}
-        />
-        
-        {/* Main content on top */}
-        <div className="relative z-10">
-          {children}
-        </div>
+      <article className={`glow-card glow-card-${identifier} h-fit cursor-pointer border border-[#2a2e5a] transition-all duration-300 relative bg-[#101123] text-gray-200 rounded-xl hover:border-transparent w-full`}>
+        <div className="glows"></div>
+        {children}
       </article>
     </div>
   );
