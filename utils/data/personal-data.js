@@ -9,6 +9,6 @@ export const personalData = {
   github: 'https://github.com/Anuj-Parihar',
   linkedIn: 'https://www.linkedin.com/in/anuj-parihar-716336233/',
   GFG: "https://www.geeksforgeeks.org/user/anujparihar/",
-  devUsername: "said7388",
-  resume: "https://github.com/Anuj-Parihar/resume/blob/main/anuj-final-resume%20(3).pdf"
+  devUsername: "anujparihar",
+  resume: "https://github.com/Anuj-Parihar/resume/blob/main/anuj-parihar-resume.pdf"
 }
