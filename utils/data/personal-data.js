@@ -10,5 +10,6 @@ export const personalData = {
   linkedIn: 'https://www.linkedin.com/in/anuj-parihar-716336233/',
   GFG: "https://www.geeksforgeeks.org/user/anujparihar/",
   devUsername: "anujparihar", 
+  
   resume: "https://github.com/Anuj-Parihar/resume/blob/main/resume-anuj.pdf"
 }

@@ -6,4 +6,5 @@ export const contactsData = {
     linkedIn: 'https://www.linkedin.com/in/anuj-parihar-716336233/',
     GFG: "https://www.geeksforgeeks.org/user/anujparihar/",
     devUsername: "anujparihar"
+    
 }
