@@ -3,7 +3,7 @@ export const experiences = [
     id: 1,
     title: 'Software Developer Intern (Remote)',
     company: "Exzellent GmbH",
-    duration: "(Jun 2025 - Present)"
+    duration: "(Jun 2025 - Sep 2025)"
   },
   {
     id: 2,
