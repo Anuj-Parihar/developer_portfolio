@@ -11,5 +11,5 @@ export const personalData = {
   GFG: "https://www.geeksforgeeks.org/user/anujparihar/",
   devUsername: "anujparihar", 
   
-  resume: "https://github.com/Anuj-Parihar/resume/blob/main/resume-anuj.pdf"
+  resume: "https://github.com/Anuj-Parihar/resume/blob/main/anujparihar-resume.pdf"
 }
