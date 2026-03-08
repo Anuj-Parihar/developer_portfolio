@@ -17,5 +17,4 @@ export const experiences = [
     company: "Marvik Solutions Private Limited",
     duration: "(Jun 2024 - July 2024)"
   },
-  
 ]
